@@ -13,30 +13,30 @@ private func SquareAroundCircle(center: CGPoint, radius: CGFloat) -> CGRect {
 
 class CircularRevealAnimator {
     var completion: () -> Void = {}
-
+    
     private let layer: CALayer
     private let mask: CAShapeLayer
     private let animation: CABasicAnimation
-
+    
     var duration: CFTimeInterval {
         get { return animation.duration }
         set(value) { animation.duration = value }
     }
-
+    
     var timingFunction: CAMediaTimingFunction! {
         get { return animation.timingFunction }
         set(value) { animation.timingFunction = value }
     }
-
+    
     init(layer: CALayer, center: CGPoint, startRadius: CGFloat, endRadius: CGFloat) {
-        let startPath = CGPathCreateWithEllipseInRect(SquareAroundCircle(center, startRadius), nil)
-        let endPath = CGPathCreateWithEllipseInRect(SquareAroundCircle(center, endRadius), nil)
-
+        let startPath = CGPathCreateWithEllipseInRect(SquareAroundCircle(center, radius: startRadius), UnsafePointer())
+        let endPath = CGPathCreateWithEllipseInRect(SquareAroundCircle(center, radius: endRadius), UnsafePointer())
+        
         self.layer = layer
-
+        
         mask = CAShapeLayer()
         mask.path = endPath
-
+        
         animation = CABasicAnimation(keyPath: "path")
         animation.fromValue = startPath
         animation.toValue = endPath
@@ -46,7 +46,7 @@ class CircularRevealAnimator {
             self.animation.delegate = nil
         }
     }
-
+    
     func start() {
         layer.mask = mask
         mask.frame = layer.bounds
